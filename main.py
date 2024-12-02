@@ -1,38 +1,34 @@
-from PyQt6.QtWidgets import QWidget, QPushButton, QApplication
-from PyQt6.QtGui import QPainter, QColor
-from random import randint
+from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
+from PyQt6 import uic
+import sqlite3
 import sys
 
 
-class RandomCircles(QWidget):
+class Coffee(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Случайные окружности")
-        self.setFixedSize(600, 500)
+        uic.loadUi("main.ui", self)
+        self.setFixedSize(self.width(), self.height())
+        self.connection = sqlite3.connect("coffee.sqlite")
+        self.load_table()
 
-        self.draw_button = QPushButton("Случайная окружность", self)
-        self.draw_button.setGeometry(10, 450, 580, 40)
-        self.draw_button.clicked.connect(self.draw_circle)
-
-        self.drawing = False
-
-    def draw_circle(self):
-        self.drawing = True
-        self.repaint()
-        self.drawing = False
-
-    def paintEvent(self, event):
-        if self.drawing:
-            qp = QPainter(self)
-            color = QColor(randint(0, 255), randint(0, 255), randint(0, 255))
-            qp.setBrush(color)
-            size = randint(10, 200)
-            qp.drawEllipse(randint(0, self.width() - size),
-                           randint(0, self.height() - size), size, size)
+    def load_table(self):
+        cursor = self.connection.cursor()
+        data = cursor.execute("SELECT Coffees.id, sort, roasting, hammering, description, price, "
+                              "packing FROM Coffees "
+                              "INNER JOIN Roastings ON Roastings.id = roasting_id "
+                              "INNER JOIN Hammerings ON Hammerings.id = hammering_id").fetchall()
+        self.table.setColumnCount(7)
+        self.table.setRowCount(len(data))
+        self.table.setHorizontalHeaderLabels(["ID", "Сорт", "Обжарка", "Форма",
+                                              "Описание", "Цена", "Объем"])
+        for i, row in enumerate(data):
+            for j, element in enumerate(row):
+                self.table.setItem(i, j, QTableWidgetItem(str(element)))
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = RandomCircles()
+    window = Coffee()
     window.show()
     sys.exit(app.exec())
