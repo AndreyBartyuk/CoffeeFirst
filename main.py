@@ -1,11 +1,10 @@
 from PyQt6.QtWidgets import QWidget, QPushButton, QApplication
 from PyQt6.QtGui import QPainter, QColor
-from PyQt6 import uic
 from random import randint
 import sys
 
 
-class YellowCircles(QWidget):
+class RandomCircles(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Случайные окружности")
@@ -34,6 +33,6 @@ class YellowCircles(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = YellowCircles()
+    window = RandomCircles()
     window.show()
     sys.exit(app.exec())
