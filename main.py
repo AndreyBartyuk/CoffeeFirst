@@ -24,7 +24,12 @@ class Coffee(QMainWindow):
                                               "Описание", "Цена", "Объем"])
         for i, row in enumerate(data):
             for j, element in enumerate(row):
-                self.table.setItem(i, j, QTableWidgetItem(str(element)))
+                text = str(element)
+                if j == 5:
+                    text += " ₽"
+                elif j == 6:
+                    text += " г"
+                self.table.setItem(i, j, QTableWidgetItem(text))
 
 
 if __name__ == "__main__":
