@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
+from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QTableWidget
 from PyQt6 import uic
 import sqlite3
 import sys
@@ -22,6 +22,7 @@ class Coffee(QMainWindow):
         self.table.setRowCount(len(data))
         self.table.setHorizontalHeaderLabels(["ID", "Сорт", "Обжарка", "Форма",
                                               "Описание", "Цена", "Объем"])
+        self.table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         for i, row in enumerate(data):
             for j, element in enumerate(row):
                 text = str(element)
