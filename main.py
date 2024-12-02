@@ -8,11 +8,13 @@ import sys
 class YellowCircles(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi("UI.ui", self)
-        self.setWindowTitle("Желтые окружности")
-        self.setFixedSize(self.width(), self.height())
+        self.setWindowTitle("Случайные окружности")
+        self.setFixedSize(600, 500)
+
+        self.draw_button = QPushButton("Случайная окружность", self)
+        self.draw_button.setGeometry(10, 450, 580, 40)
         self.draw_button.clicked.connect(self.draw_circle)
-        self.color = QColor("#fefe22")
+
         self.drawing = False
 
     def draw_circle(self):
@@ -23,7 +25,8 @@ class YellowCircles(QWidget):
     def paintEvent(self, event):
         if self.drawing:
             qp = QPainter(self)
-            qp.setBrush(self.color)
+            color = QColor(randint(0, 255), randint(0, 255), randint(0, 255))
+            qp.setBrush(color)
             size = randint(10, 200)
             qp.drawEllipse(randint(0, self.width() - size),
                            randint(0, self.height() - size), size, size)
