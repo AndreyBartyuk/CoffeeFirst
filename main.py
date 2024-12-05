@@ -1,15 +1,16 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QTableWidget, QComboBox
-from PyQt6 import uic
+from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QTableWidget
+from EditFormDesign import Ui_EditWindow
+from MainWindowDesign import Ui_MainWindow
 import sqlite3
 import sys
 
 
-class EditCoffeeForm(QMainWindow):
+class EditCoffeeForm(QMainWindow, Ui_EditWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-        uic.loadUi("addEditCoffeeForm.ui", self)
+        self.setupUi(self)
         self.setFixedSize(self.width(), self.height())
-        self.connection = sqlite3.connect("coffee.sqlite")
+        self.connection = sqlite3.connect("data/coffee.sqlite")
         self.edits = [self.id, self.sort, self.roast, self.form,
                       self.description, self.price, self.packing]
         self.price.setMinimum(1)
@@ -77,16 +78,15 @@ class EditCoffeeForm(QMainWindow):
             edit.clear()
 
 
-
-class Coffee(QMainWindow):
+class Coffee(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("main.ui", self)
+        self.setupUi(self)
         self.setFixedSize(self.width(), self.height())
         self.edit_form = EditCoffeeForm(self)
         self.edit_btn.clicked.connect(self.edit_form.show_edit)
         self.new_btn.clicked.connect(self.edit_form.show_new)
-        self.connection = sqlite3.connect("coffee.sqlite")
+        self.connection = sqlite3.connect("data/coffee.sqlite")
         self.load_data()
 
     def load_data(self):
